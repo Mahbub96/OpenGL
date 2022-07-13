@@ -44,6 +44,8 @@ void printLine(double x1, double y1, double x2, double y2)
 
 void printLike3dBox()
 {
+
+
     // print first layer
     printLine(-50, 50, 50, 50);
     printLine(-50, 50, -50, -50);
@@ -74,6 +76,11 @@ void myDisplay()
 
     glClear(GL_COLOR_BUFFER_BIT);
 
+     // print a line for keep track of cord line
+    //Only for DebugPurpose
+    printLine(-100,0,100,0); /*Print X cord*/
+    printLine(0,100,0,-100); /*Print y cord*/
+
     printLike3dBox();
 
     // for printing Door
@@ -83,6 +90,9 @@ void myDisplay()
 
     printLineWithColor(-2, -50, -2, 10, 1, 0, 0);
     printLineWithColor(2, -50, 2, 10, 1, 0, 0);
+
+    /*Print window */
+    //printLine(-15,)
 
     glFlush();
 }
