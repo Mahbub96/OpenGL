@@ -1,31 +1,16 @@
 #include <GL/freeglut.h>
 #include <GL/gl.h>
-#include <stdlib.h>
-#include <math.h>
-#define PI 3.1416
-#include <stdlib.h>
-#include <string>
-using namespace std;
 
 class Car
 {
     double posX, posY;
-    double dx, dy;
-
-    // string color;
 
 public:
     Car(float x, float y)
     {
         this->posX = x;
         this->posY = y;
-        // color = "ff0000";
     }
-
-    // void color(string c)
-    // {
-    //     color = c;
-    // }
 
     void chechis()
     {
@@ -76,7 +61,7 @@ public:
     {
 
         glBegin(GL_POLYGON);
-        // glColor3d(0, 0, 0);
+
         for (float i = 0; i < 360; i++)
         {
             float x = cos(i) * r + X + posX;
