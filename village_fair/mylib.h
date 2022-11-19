@@ -15,6 +15,7 @@ void circle(int x, int y, double h, double w, double d)
 
     glEnd();
 }
+
 void circleFill(int x, int y, double h, double w, double d)
 {
 
@@ -157,24 +158,167 @@ void sky()
     glPopMatrix();
 }
 
-void stall(int x, int y, double h, double w)
+void pond(double x, double y, double z, double ratio)
 {
+
+    glColor3ub(212, 241, 249);
+    double w = ratio * 0.1;
+    double h = ratio * 0.1;
     glPushMatrix();
-    glScaled(w, h, 0);
-    glTranslated(x, y, 0);
+    glRotated(40, 1, 0, 0);
+    glScaled(w, h, 1);
+    glTranslated(x, y, z);
     glPushMatrix();
-    glRotated(80, 1, 0, 0);
-    rect(0, 0, 100, 180, -10);
+    circleFill(0, 20, 10, 10, 5);
+    circleFill(0, 0, 10, 10, 5);
+    glTranslated(-10, 8, 0);
+    circleFill(0, 0, 10, 10, 5);
+    glTranslated(0, 9, 0);
+    circleFill(0, 0, 10, 10, 5);
     glPopMatrix();
 
-    rect(0, -300, 100, 180, -10);
+    glPushMatrix();
+    glTranslated(10, 8, 0);
+    circleFill(0, 0, 10, 10, 5);
+    glTranslated(0, 9, 0);
+    circleFill(0, 0, 10, 10, 5);
+    glPopMatrix();
 
     glPopMatrix();
 }
 
-void pond()
+void stand(float x, float y)
 {
     glPushMatrix();
-    circleFill(0, 0, 10, 10, 5);
+    glColor3f(0.5, 0.0f, 0.0f);
+    glBegin(GL_QUADS);
+    glVertex3d(x - 0.5, y, 5);
+    glVertex3d(x - 0.5, y - 12, 5);
+    glVertex3d(x, y - 12, 5);
+    glVertex3d(x, y, 5);
+    glEnd();
     glPopMatrix();
+}
+
+void square_table(float x1, float y1, float x2, float y2)
+{
+    glPushMatrix();
+    glBegin(GL_QUADS);
+    glVertex3d(x1, y1, 5);
+    glVertex3d(x1, y2, 5);
+    glVertex3d(x2, y2, 5);
+    glVertex3d(x2, y1, 5);
+    glEnd();
+    glPopMatrix();
+}
+
+void stall(double x, double y, double z, double ratio)
+{
+
+    double h = ratio;
+    double w = ratio;
+
+    glPushMatrix();
+    glTranslated(0, 0, -20);
+    glTranslated(x, y, z);
+    glScaled(w, h, z);
+    /// roof
+    glPushMatrix();
+    glColor3f(1.0f, 0.92f, 0.75f);
+    glBegin(GL_QUADS);
+    glVertex3d(6, 6, 5);
+    glVertex3d(-6, 6, 5);
+    glVertex3d(-10, 2, 5);
+    glVertex3d(3, 2, 5);
+    glEnd();
+    glPopMatrix();
+
+    /// triangle side
+    glPushMatrix();
+    glColor3f(1.0f, 0.95f, 0.80f);
+    glBegin(GL_TRIANGLES);
+    glVertex3d(6, 6, 5);
+    glVertex3d(3, 2, 5);
+    glVertex3d(10, 4, 5);
+    glEnd();
+    glPopMatrix();
+
+    stand(-9.0, 2.0);
+    stand(3.0, 2.0);
+    stand(9.5, 4.0);
+
+    glPushMatrix();
+    glColor3f(1.0f, 0.95f, 0.80f);
+    glBegin(GL_QUADS);
+    glVertex3d(2.5, -4, 5);
+    glVertex3d(2.5, -9.5, 5);
+    glVertex3d(9, -7.5, 5);
+    glVertex3d(9, -2, 5);
+    glEnd();
+    glPopMatrix();
+
+    square_table(3, -4, -9, -9.5);
+    glColor3f(0.7f, 0.5f, 0.0f);
+    square_table(3, -2, -9, -7.5);
+    square_table(2.5, -2, 9, -7.5);
+
+    glPopMatrix();
+    glPopMatrix();
+}
+
+void hill(double x, double y, double z, double ratio)
+{
+    double w = ratio * 0.01;
+    double h = ratio * 0.01;
+
+    glPushMatrix();
+    glTranslated(x, y, z);
+    glScaled(w, h, 3);
+    glBegin(GL_POLYGON);
+    glColor3ub(171, 97, 84);
+    glVertex2d(0, 200);
+    glColor3ub(83, 40, 31);
+    glVertex2d(150, 0);
+    glVertex2d(-150, 0);
+    glEnd();
+    glPopMatrix();
+}
+
+void river(double x, double y, double z)
+{
+
+    glPushMatrix();
+    glColor3ub(255, 255, 255);
+    glRotated(-50, 0, 0, 1);
+    glTranslated(x, y, z);
+    glScaled(0.3, 5, 0.1);
+    glBegin(GL_POLYGON);
+    glVertex3d(0, 0, 5);
+    glVertex3d(-10, 0, 5);
+    glVertex3d(-10, 10, 5);
+    glVertex3d(0, 10, 5);
+    glEnd();
+    glPopMatrix();
+}
+
+void boat(double x, double y, double z, double ratio)
+{
+    double w = ratio * 0.01;
+    double h = ratio * 0.01;
+    glPushMatrix();
+
+    glTranslated(x, y, z);
+    glScaled(w, h, 1);
+    glBegin(GL_POLYGON);
+    glVertex3d(0, 0, z);
+    glVertex3d(10, 0, z);
+    glVertex3d(10, 10, z);
+    glVertex3d(0, 10, z);
+
+    glEnd();
+    glPopMatrix();
+}
+
+void nagordola()
+{
 }
