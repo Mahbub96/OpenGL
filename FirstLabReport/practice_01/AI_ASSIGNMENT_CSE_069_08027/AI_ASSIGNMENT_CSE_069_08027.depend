@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1666365693 source:c:\users\mahbub\desktop\others\computergraphics\firstlabreport\practice_01\ai_assignment_cse_069_08027\main.cpp
+	<iostream>
+	<vector>
+	<queue>
+

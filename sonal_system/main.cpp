@@ -29,9 +29,10 @@ void myDisplay()
   sky();
   ground();
 
-  glColor3f(1, .5, 0);
+  glColor3ub(0, 127, 0);
+
   tree(-100, 100, 0.5, 0.2);
-  stall(-100,-100,1,1);
+  stall(-100, -100, 1, 1);
   glFlush();
 }
 
