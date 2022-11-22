@@ -15,8 +15,9 @@
 #include <iostream>
 using namespace std;
 
-double dx = 0.01, dy, c1 = -10, c2 = -10, c3 = 6;
+double dx = 0.01, dy, c1 = -10, c2 = -10, c3 = 6, bx = 0, by = 0;
 double width, height;
+double angle = 0;
 
 // Called when a key is pressed
 void handleKeypress(unsigned char key, int x, int y)
@@ -64,16 +65,19 @@ void handleResize(int w, int h)
   height = h;
   glViewport(0, 0, w, h);
   glMatrixMode(GL_PROJECTION);
+
   glLoadIdentity();
   gluPerspective(45.0, (double)w / (double)h, 10.0, 100.0);
+  glShadeModel(GL_SMOOTH);
 }
 
-void updateX(int value)
+void updateX()
 {
 
-  c1 += 0.01;
-  c2 += 0.02;
-  c3 += 0.03;
+  c1 += 0.1;
+  c2 += 0.2;
+  c3 += 0.3;
+  angle > 360 ? angle = -360 : angle += 0.1;
 
   if (c1 > 13)
     c1 = -10;
@@ -81,9 +85,18 @@ void updateX(int value)
     c2 = -10;
   if (c3 > 13)
     c3 = -10;
+  if (bx > 3)
+  {
+    bx -= 0.1;
+    by -= 0.1;
+  }
+  if (bx < -3)
+  {
+    bx += 0.1;
+    by += 0.1;
+  }
 
   glutPostRedisplay();
-  glutTimerFunc(25, updateX, 0);
 }
 
 // Draws the 3D scene
@@ -94,71 +107,62 @@ void drawScene()
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
   glTranslatef(0.0f, 0.0f, -20.0f);
+  /*
+    // Add ambient light
+    GLfloat ambientColor[] = {0.5f, 0.5f, 0.5f, 1.0f}; // Color (0.2, 0.2, 0.2)
+    glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambientColor);
 
-  // Add ambient light
-  GLfloat ambientColor[] = {0.5f, 0.5f, 0.5f, 1.0f}; // Color (0.2, 0.2, 0.2)
-  glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambientColor);
+    // Add positioned light
+    GLfloat diffuseLightColor0[] = {1.0f, 1.0f, 1.0f, 1.0f};
+    GLfloat specularLightColor0[] = {1.0f, 1.0f, 1.0f, 1.0f};
+    GLfloat lightPos0[] = {1.0f, 1.0f, 0.0f, 1.0f};
+    // glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuseLightColor0);
+    glLightfv(GL_LIGHT0, GL_SPECULAR, specularLightColor0);
+    glLightfv(GL_LIGHT0, GL_POSITION, lightPos0);
 
-  // Add positioned light
-  GLfloat diffuseLightColor0[] = {1.0f, 1.0f, 1.0f, 1.0f};
-  GLfloat specularLightColor0[] = {1.0f, 1.0f, 1.0f, 1.0f};
-  GLfloat lightPos0[] = {1.0f, 1.0f, 0.0f, 1.0f};
-  // glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuseLightColor0);
-  glLightfv(GL_LIGHT0, GL_SPECULAR, specularLightColor0);
-  glLightfv(GL_LIGHT0, GL_POSITION, lightPos0);
-
-  // Add directed light
-  GLfloat lightColor1[] = {0.5f, 0.2f, 0.2f, 1.0f}; // Color (0.5, 0.2, 0.2)
-  // Coming from the direction (-1, 0.5, 0.5)
-  GLfloat lightPos1[] = {-1.0f, 0.5f, 0.5f, 0.0f};
-  glLightfv(GL_LIGHT1, GL_DIFFUSE, lightColor1);
-  glLightfv(GL_LIGHT1, GL_POSITION, lightPos1);
-
+    // Add directed light
+    GLfloat lightColor1[] = {0.5f, 0.2f, 0.2f, 1.0f}; // Color (0.5, 0.2, 0.2)
+    // Coming from the direction (-1, 0.5, 0.5)
+    GLfloat lightPos1[] = {-1.0f, 0.5f, 0.5f, 0.0f};
+    glLightfv(GL_LIGHT1, GL_DIFFUSE, lightColor1);
+    glLightfv(GL_LIGHT1, GL_POSITION, lightPos1);
+  */
   glColor3f(1.0f, 1.0f, 0.0f);
 
-  glPushMatrix();
+  drawComponent(-8, 1.3, 2, 2, hill);
+  drawComponent(-6, 2, 1, 1, hill);
+  drawComponent(-12, 2, 1.5, 1.5, hill);
+
+  // glPushMatrix();
+
+  // glRotated(40, 1, 0, 0);
+  // glRotated(70, 1, 0, 0);
+  // river(2, -7, 5, 1);
+  // // boat(0, 0, 10, 1);
+  // glPopMatrix();
+
+  drawComponent(-6.0, 1.2, 0.13, 0.13, tree);
+  drawComponent(-5.5, 1.1, 0.12, 0.12, tree);
+  drawComponent(-5.0, 1.2, 0.15, 0.15, tree);
+  drawComponent(-5.8, 1.0, 0.2, 0.2, tree);
+  drawComponent(-5, 3.7, 0.5, 0.5, tree);
+
+  drawComponent(c1, sin(angle * 0.3) + 5.5, 0.5, 0.5, cloud);
+  drawComponent(c2, 5.4, 0.10, 0.10, cloud);
+  drawComponent(c3, 5.5, 0.9, 0.9, cloud);
+
+  drawComponent(3.2, 0.3, 1.5, 1.5, tree); /*jumbo tree*/
+
+  drawComponent(-6.2, -0.7, 10, 10, stall);
+  drawComponent(-5, 0, 9, 9, stall);
+  drawComponent(-4, 0.5, 8, 8, stall);
+  drawComponent(-3.2, 0.9, 7, 7, stall);
+  drawComponent(-2.8, 1.2, 6, 6, stall);
 
   sky();
   ground();
 
-  hill(-12, 2, 4, 1.5);
-  hill(-8, 1.3, 6, 2);
-  hill(-6, 2, 5, 1);
-
-  glPushMatrix();
-
-  glRotated(40, 1, 0, 0);
-  river(5, -25, 5);
-  glPopMatrix();
-  glColor3d(1, 0, 1);
-  boat(0, 0, 10, 10);
-
-  tree(-6.0, 1.2, 0.13, 10);
-  tree(-5.5, 1.1, 0.12, 10);
-  tree(-5.0, 1.2, 0.15, 10);
-  // tree(-5, 2.7, 0.2, 10);
-  tree(-5, 3.7, 0.5, 3);
-
-  cloud(c1, 5.7, 0.5, 1.3);
-  cloud(c2, 4.2, 0.10, 1.3);
-  cloud(c3, 5.5, 0.9, 1.3);
-
-  tree(0, 3, 1.5, 10);
-
-  glPushMatrix();
-  glTranslated(3, -5, 0);
-  // pond(25, 10, -5, 2);
-  glPopMatrix();
-
-  glPushMatrix();
-  stall(-6.2, -0.7, 5, 0.15);
-  stall(-5, 0, 5, 0.1);
-  stall(-4, 0.5, 5, 0.08);
-  stall(-3.2, 0.9, 5, 0.06);
-  stall(-2.8, 1.2, 5, 0.05);
-  glPopMatrix();
-
-  glPopMatrix();
+  updateX();
 
   glutSwapBuffers();
 }
@@ -180,7 +184,6 @@ int main(int argc, char **argv)
   glutKeyboardFunc(handleKeypress);
   glutReshapeFunc(handleResize);
   // glutTimerFunc(25, update, 0);  // Add a timer
-  glutTimerFunc(25, updateX, 0); // Add a timer
 
   glutMainLoop();
   return 0;
