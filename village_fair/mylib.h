@@ -2,6 +2,7 @@
 #include <GL/gl.h>
 #include <stdlib.h>
 #include <math.h>
+
 void drawComponent(double x, double y, double h, double w, void (*component)())
 {
     glPushMatrix();
@@ -142,9 +143,9 @@ void sky()
 void stand(float x, float y)
 {
     glPushMatrix();
-    glColor3f(0.5, 0.0f, 0.0f);
+    glColor3f(0.3, 0.0f, 0.0f);
     glBegin(GL_QUADS);
-    glVertex3d(x - 0.5, y, 5);
+    glVertex3d(x - 0.3, y, 5);
     glVertex3d(x - 0.5, y - 12, 5);
     glVertex3d(x, y - 12, 5);
     glVertex3d(x, y, 5);
@@ -252,12 +253,30 @@ void boat()
     glEnd();
 }
 
+void bucketOfNagordola()
+{
+    glPushMatrix();
+    glRotated(30, 1, 0, 0);
+    glutSolidTorus(0.2, 0.8, 360, 360);
+    glPopMatrix();
+}
+
+void pole(double x, double y, double z, double w, double h)
+{
+    glPushMatrix();
+    glTranslated(x, y, z);
+    glScaled(w, h, 1);
+    glRotated(90, 1, 0, 0);
+    glutSolidTorus(0.2, 0.8, 360, 360);
+    // bucketOfNagordola();
+    glPopMatrix();
+}
+
+void roundablePole()
+{
+}
+
 void nagordola()
 {
-
-    glBegin(GL_POLYGON);
-    glVertex3d(0, 0, 0);
-    glVertex3d(2, 2, 0);
-    glVertex3d(2, 0, 0);
-    glEnd();
+    pole(0, 4, 1, 1, 14);
 }

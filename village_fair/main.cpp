@@ -74,10 +74,10 @@ void handleResize(int w, int h)
 void updateX()
 {
 
-  c1 += 0.1;
-  c2 += 0.2;
-  c3 += 0.3;
-  angle > 360 ? angle = -360 : angle += 0.1;
+  c1 += 0.01;
+  c2 += 0.02;
+  c3 += 0.03;
+  angle > 360 ? angle = -360 : angle += 0.01;
 
   if (c1 > 13)
     c1 = -10;
@@ -107,27 +107,34 @@ void drawScene()
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
   glTranslatef(0.0f, 0.0f, -20.0f);
-  /*
-    // Add ambient light
-    GLfloat ambientColor[] = {0.5f, 0.5f, 0.5f, 1.0f}; // Color (0.2, 0.2, 0.2)
-    glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambientColor);
 
-    // Add positioned light
-    GLfloat diffuseLightColor0[] = {1.0f, 1.0f, 1.0f, 1.0f};
-    GLfloat specularLightColor0[] = {1.0f, 1.0f, 1.0f, 1.0f};
-    GLfloat lightPos0[] = {1.0f, 1.0f, 0.0f, 1.0f};
-    // glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuseLightColor0);
-    glLightfv(GL_LIGHT0, GL_SPECULAR, specularLightColor0);
-    glLightfv(GL_LIGHT0, GL_POSITION, lightPos0);
+  // Add ambient light
+  GLfloat ambientColor[] = {0.8f, 0.8f, 0.8f, 1.0f}; // Color (0.2, 0.2, 0.2)
+  glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambientColor);
 
-    // Add directed light
-    GLfloat lightColor1[] = {0.5f, 0.2f, 0.2f, 1.0f}; // Color (0.5, 0.2, 0.2)
-    // Coming from the direction (-1, 0.5, 0.5)
-    GLfloat lightPos1[] = {-1.0f, 0.5f, 0.5f, 0.0f};
-    glLightfv(GL_LIGHT1, GL_DIFFUSE, lightColor1);
-    glLightfv(GL_LIGHT1, GL_POSITION, lightPos1);
-  */
+  // Add positioned light
+  GLfloat diffuseLightColor0[] = {1.0f, 1.0f, 1.0f, 1.0f};
+  GLfloat specularLightColor0[] = {1.0f, 1.0f, 1.0f, 0.3f};
+  GLfloat lightPos0[] = {1.0f, 1.0f, 0.0f, 1.0f};
+  // glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuseLightColor0);
+  glLightfv(GL_LIGHT0, GL_SPECULAR, specularLightColor0);
+  glLightfv(GL_LIGHT0, GL_POSITION, lightPos0);
+
+  // Add directed light
+  GLfloat lightColor1[] = {0.5f, 0.2f, 0.2f, 1.0f}; // Color (0.5, 0.2, 0.2)
+  // Coming from the direction (-1, 0.5, 0.5)
+  GLfloat lightPos1[] = {-1.0f, 0.5f, 0.5f, 0.0f};
+  glLightfv(GL_LIGHT1, GL_DIFFUSE, lightColor1);
+  glLightfv(GL_LIGHT1, GL_POSITION, lightPos1);
+
   glColor3f(1.0f, 1.0f, 0.0f);
+  drawComponent(1.0, 1.2, 100, 100, nagordola);
+
+  drawComponent(-12.0, 2.2, 1, 1, tree);
+  drawComponent(-10.10, 1.1, 1, 1, tree);
+  drawComponent(-10.0, 1.2, 1, 1, tree);
+  drawComponent(-10.8, 1.0, 1, 1, tree);
+  drawComponent(-10, 3.7, 1, 1, tree);
 
   drawComponent(-8, 1.3, 2, 2, hill);
   drawComponent(-6, 2, 1, 1, hill);
@@ -140,12 +147,6 @@ void drawScene()
   // river(2, -7, 5, 1);
   // // boat(0, 0, 10, 1);
   // glPopMatrix();
-
-  drawComponent(-6.0, 1.2, 0.13, 0.13, tree);
-  drawComponent(-5.5, 1.1, 0.12, 0.12, tree);
-  drawComponent(-5.0, 1.2, 0.15, 0.15, tree);
-  drawComponent(-5.8, 1.0, 0.2, 0.2, tree);
-  drawComponent(-5, 3.7, 0.5, 0.5, tree);
 
   drawComponent(c1, sin(angle * 0.3) + 5.5, 0.5, 0.5, cloud);
   drawComponent(c2, 5.4, 0.10, 0.10, cloud);
