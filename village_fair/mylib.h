@@ -2,6 +2,51 @@
 #include <GL/gl.h>
 #include <stdlib.h>
 #include <math.h>
+#include <iostream>
+
+using namespace std;
+
+double dx = 0.01, dy, c1 = -48, c2 = -48, c3 = -48, bx = 0, by = 0, posSun = -3;
+double width, height;
+double angle = 0;
+
+// Initializes 3D rendering
+void initRendering()
+{
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_COLOR_MATERIAL);
+    glEnable(GL_LIGHTING);  // Enable lighting
+    glEnable(GL_LIGHT0);    // Enable light #0
+    glEnable(GL_LIGHT1);    // Enable light #1
+    glEnable(GL_NORMALIZE); // Automatically normalize normals
+                            // glShadeModel(GL_SMOOTH); // Enable smooth shading
+}
+
+// Called when the window is resized
+void handleResize(int w, int h)
+{
+    width = w;
+    height = h;
+    glViewport(0, 0, w, h);
+    glMatrixMode(GL_PROJECTION);
+
+    glLoadIdentity();
+    gluPerspective(45.0, (double)w / (double)h, 10.0, 100.0);
+    glShadeModel(GL_SMOOTH);
+}
+
+void update()
+{
+
+    c1 > 48 ? c1 = -48 : c1 += 0.03;
+    c2 > 48 ? c2 = -48 : c2 += 0.02;
+    c3 > 48 ? c3 = -48 : c3 += 0.01;
+
+    posSun < -6.2 ? posSun = -3 : posSun -= 0.001;
+    angle > 360 ? angle = -360 : angle += 0.1;
+
+    glutPostRedisplay();
+}
 
 void drawComponent(double x, double y, double h, double w, void (*component)())
 {
@@ -99,7 +144,7 @@ void ground()
 {
     glPushMatrix();
     glScaled(0.1, 0.1, 0.0);
-    glTranslated(0, 0, -100);
+    glTranslated(0, -100, 10);
     glRotated(-30, 1, 0, 0);
 
     glBegin(GL_QUADS);
@@ -118,8 +163,8 @@ void ground()
 void sky()
 {
     glPushMatrix();
-    glScaled(0.03, 0.03, 0);
-    glTranslated(0, 0, 1000);
+    glTranslated(0, 0, -6);
+    glScaled(0.3, 0.06, 0);
     glRotated(-30, 1, 0, 0);
     glColor3d(0, 0.4, 0);
 
@@ -267,7 +312,8 @@ void pole(double x, double y, double z, double w, double h)
     glTranslated(x, y, z);
     glScaled(w, h, 1);
     glRotated(90, 1, 0, 0);
-    glutSolidTorus(0.2, 0.8, 360, 360);
+
+    // glutSolidTorus(0.2, 0.8, 360, 360);
     // bucketOfNagordola();
     glPopMatrix();
 }
@@ -279,4 +325,24 @@ void roundablePole()
 void nagordola()
 {
     pole(0, 4, 1, 1, 14);
+}
+
+void sun()
+{
+    glTranslated(0, 0, -20);
+    glutSolidSphere(10, 100, 100);
+}
+
+void background()
+{
+    sky();
+
+    glPushMatrix();
+    glColor3ub(249, 215, 25);
+    glTranslated(cos(posSun) * 45, sin(posSun) * 25, 1);
+    glScaled(0.3, 0.3, 0.3);
+    sun();
+    glPopMatrix();
+
+    ground();
 }

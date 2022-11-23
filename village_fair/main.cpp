@@ -12,12 +12,6 @@
 */
 
 #include "mylib.h"
-#include <iostream>
-using namespace std;
-
-double dx = 0.01, dy, c1 = -10, c2 = -10, c3 = 6, bx = 0, by = 0;
-double width, height;
-double angle = 0;
 
 // Called when a key is pressed
 void handleKeypress(unsigned char key, int x, int y)
@@ -46,59 +40,6 @@ void handleKeypress(unsigned char key, int x, int y)
   glutPostRedisplay();
 }
 
-// Initializes 3D rendering
-void initRendering()
-{
-  glEnable(GL_DEPTH_TEST);
-  glEnable(GL_COLOR_MATERIAL);
-  glEnable(GL_LIGHTING);  // Enable lighting
-  glEnable(GL_LIGHT0);    // Enable light #0
-  glEnable(GL_LIGHT1);    // Enable light #1
-  glEnable(GL_NORMALIZE); // Automatically normalize normals
-  // glShadeModel(GL_SMOOTH); // Enable smooth shading
-}
-
-// Called when the window is resized
-void handleResize(int w, int h)
-{
-  width = w;
-  height = h;
-  glViewport(0, 0, w, h);
-  glMatrixMode(GL_PROJECTION);
-
-  glLoadIdentity();
-  gluPerspective(45.0, (double)w / (double)h, 10.0, 100.0);
-  glShadeModel(GL_SMOOTH);
-}
-
-void updateX()
-{
-
-  c1 += 0.01;
-  c2 += 0.02;
-  c3 += 0.03;
-  angle > 360 ? angle = -360 : angle += 0.01;
-
-  if (c1 > 13)
-    c1 = -10;
-  if (c2 > 13)
-    c2 = -10;
-  if (c3 > 13)
-    c3 = -10;
-  if (bx > 3)
-  {
-    bx -= 0.1;
-    by -= 0.1;
-  }
-  if (bx < -3)
-  {
-    bx += 0.1;
-    by += 0.1;
-  }
-
-  glutPostRedisplay();
-}
-
 // Draws the 3D scene
 void drawScene()
 {
@@ -106,16 +47,17 @@ void drawScene()
 
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
-  glTranslatef(0.0f, 0.0f, -20.0f);
+  glTranslatef(0.0f, 0.0f, -70.0f);
 
   // Add ambient light
-  GLfloat ambientColor[] = {0.8f, 0.8f, 0.8f, 1.0f}; // Color (0.2, 0.2, 0.2)
+  float sp = sin(posSun);
+  GLfloat ambientColor[] = {sp, sp, sp, 1}; // Color (0.2, 0.2, 0.2)
   glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambientColor);
 
   // Add positioned light
-  GLfloat diffuseLightColor0[] = {1.0f, 1.0f, 1.0f, 1.0f};
-  GLfloat specularLightColor0[] = {1.0f, 1.0f, 1.0f, 0.3f};
-  GLfloat lightPos0[] = {1.0f, 1.0f, 0.0f, 1.0f};
+  GLfloat diffuseLightColor0[] = {1.0, 1.0, 1.0, 1.0};
+  GLfloat specularLightColor0[] = {1.0, 1.0, 1.0, 0.1f};
+  GLfloat lightPos0[] = {1.0, 1.0, 0.0, 1.0};
   // glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuseLightColor0);
   glLightfv(GL_LIGHT0, GL_SPECULAR, specularLightColor0);
   glLightfv(GL_LIGHT0, GL_POSITION, lightPos0);
@@ -128,7 +70,7 @@ void drawScene()
   glLightfv(GL_LIGHT1, GL_POSITION, lightPos1);
 
   glColor3f(1.0f, 1.0f, 0.0f);
-  drawComponent(1.0, 1.2, 100, 100, nagordola);
+  // drawComponent(1.0, 1.2, 100, 100, nagordola);
 
   drawComponent(-12.0, 2.2, 1, 1, tree);
   drawComponent(-10.10, 1.1, 1, 1, tree);
@@ -136,9 +78,9 @@ void drawScene()
   drawComponent(-10.8, 1.0, 1, 1, tree);
   drawComponent(-10, 3.7, 1, 1, tree);
 
-  drawComponent(-8, 1.3, 2, 2, hill);
-  drawComponent(-6, 2, 1, 1, hill);
-  drawComponent(-12, 2, 1.5, 1.5, hill);
+  drawComponent(-40, 2, 8, 8, hill);
+  drawComponent(-32, 2.8, 7, 7, hill);
+  drawComponent(-50, 1.3, 10, 10, hill);
 
   // glPushMatrix();
 
@@ -148,9 +90,11 @@ void drawScene()
   // // boat(0, 0, 10, 1);
   // glPopMatrix();
 
-  drawComponent(c1, sin(angle * 0.3) + 5.5, 0.5, 0.5, cloud);
-  drawComponent(c2, 5.4, 0.10, 0.10, cloud);
-  drawComponent(c3, 5.5, 0.9, 0.9, cloud);
+  drawComponent(c1 + 0, 20.5 + 2 + sin(c1 / 5), 1.5, 1.5, cloud);
+  drawComponent(c1 + 3, 20.5 + 3 + sin(c1 / 6), 1.5, 1.5, cloud);
+  drawComponent(c1 + 5, 20.5 + 0 + sin(c1 / 3), 1.5, 1.5, cloud);
+  drawComponent(c2, 16.4, 1.10, 1.10, cloud);
+  drawComponent(c3, 10.5, 0.9, 0.9, cloud);
 
   drawComponent(3.2, 0.3, 1.5, 1.5, tree); /*jumbo tree*/
 
@@ -160,10 +104,11 @@ void drawScene()
   drawComponent(-3.2, 0.9, 7, 7, stall);
   drawComponent(-2.8, 1.2, 6, 6, stall);
 
-  sky();
-  ground();
+  glPushMatrix();
 
-  updateX();
+  drawComponent(0, 0, 100, 100, background);
+
+  update();
 
   glutSwapBuffers();
 }
