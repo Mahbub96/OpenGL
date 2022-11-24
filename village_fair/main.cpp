@@ -51,22 +51,23 @@ void drawScene()
 
   // Add ambient light
   GLfloat sp = sin(posSun);
-  GLfloat lightDepth = sin(posSun);
+  GLfloat xSunLightPos = cos(posSun);
+  GLfloat ySunLightPos = sin(posSun);
   GLfloat ambientColor[] = {sp, sp, sp, 1}; // Color (0.2, 0.2, 0.2)
   glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambientColor);
 
   // Add positioned light
-  GLfloat diffuseLightColor0[] = {-1, -1, -1, 1.0};
-  GLfloat specularLightColor0[] = {lightDepth, lightDepth, lightDepth, 0.1f};
-  GLfloat lightPos0[] = {sp, sp, sp, 1.0};
+  GLfloat diffuseLightColor0[] = {1, 1, 1, 1.0};
+  GLfloat specularLightColor0[] = {0.2, 0.2, 0.2, 0.1f};
+  GLfloat lightPos0[] = {xSunLightPos, ySunLightPos, 1, 1.0};
   glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuseLightColor0);
-  glLightfv(GL_LIGHT0, GL_SPECULAR, specularLightColor0);
+  // glLightfv(GL_LIGHT0, GL_SPECULAR, specularLightColor0);
   glLightfv(GL_LIGHT0, GL_POSITION, lightPos0);
 
   // Add directed light
   GLfloat lightColor1[] = {0.5f, 0.2f, 0.2f, 1.0f}; // Color (0.5, 0.2, 0.2)
   // Coming from the direction (-1, 0.5, 0.5)
-  GLfloat lightPos1[] = {-10.0f, 10.5f, 10.5f, 1.0f};
+  GLfloat lightPos1[] = {xSunLightPos, ySunLightPos, 1.0f, 1.0f};
   glLightfv(GL_LIGHT1, GL_DIFFUSE, lightColor1);
   glLightfv(GL_LIGHT1, GL_POSITION, lightPos1);
 
@@ -79,9 +80,9 @@ void drawScene()
   drawComponent(-10.8, 1.0, 1, 1, tree);
   drawComponent(-10, 3.7, 1, 1, tree);
 
-  drawComponent(-40, 2, 8, 8, hill);
+  drawComponent(-40, 1.8, 8, 8, hill);
   drawComponent(-32, 2.8, 7, 7, hill);
-  drawComponent(-50, 1.3, 10, 10, hill);
+  drawComponent(-50, 2.3, 10, 10, hill);
 
   // glPushMatrix();
 
@@ -92,7 +93,7 @@ void drawScene()
   // glPopMatrix();
 
   drawComponent(c1 + 0, 20.5 + 2 + sin(c1 / 5), 1.5, 1.5, cloud);
-  drawComponent(c1 + 3, 20.5 + 3 + sin(c1 / 6), 1.5, 1.5, cloud);
+  drawComponent(c1 + 3, 20.5 + 3 + sin(c1 / 7), 1.5, 1.5, cloud);
   drawComponent(c1 + 5, 20.5 + 0 + sin(c1 / 3), 1.5, 1.5, cloud);
   drawComponent(c2, 16.4, 1.10, 1.10, cloud);
   drawComponent(c3, 10.5, 0.9, 0.9, cloud);
@@ -106,9 +107,8 @@ void drawScene()
   drawComponent(-2.8, 1.2, 6, 6, stall);
 
   glPushMatrix();
-
   drawComponent(0, 0, 100, 100, background);
-
+  glPopMatrix();
   update();
 
   glutSwapBuffers();
@@ -120,6 +120,7 @@ int main(int argc, char **argv)
   // Initialize GLUT
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
+
   glutInitWindowSize(1200, 800);
 
   // Create the window

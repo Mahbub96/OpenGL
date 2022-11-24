@@ -43,7 +43,7 @@ void update()
     c3 > 48 ? c3 = -48 : c3 += 0.01;
 
     posSun < -6.2 ? posSun = -3 : posSun -= 0.001;
-    angle > 360 ? angle = -360 : angle += 0.1;
+    angle > 360 ? angle = -360 : angle += 1;
 
     glutPostRedisplay();
 }
@@ -257,7 +257,6 @@ void stall()
 
 void hill()
 {
-
     glBegin(GL_POLYGON);
     glColor3ub(171, 97, 84);
     glVertex2d(0, 200);
@@ -329,7 +328,9 @@ void nagordola()
 
 void sun()
 {
+
     glTranslated(0, 0, -20);
+    glNormal3d(0, 0, -1);
     glutSolidSphere(10, 100, 100);
 }
 
