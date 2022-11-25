@@ -15,11 +15,11 @@ void initRendering()
 {
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_COLOR_MATERIAL);
-    glEnable(GL_LIGHTING);  // Enable lighting
-    glEnable(GL_LIGHT0);    // Enable light #0
-    glEnable(GL_LIGHT1);    // Enable light #1
-    glEnable(GL_NORMALIZE); // Automatically normalize normals
-                            // glShadeModel(GL_SMOOTH); // Enable smooth shading
+    glEnable(GL_LIGHTING);   // Enable lighting
+    glEnable(GL_LIGHT0);     // Enable light #0
+    glEnable(GL_LIGHT1);     // Enable light #1
+    glEnable(GL_NORMALIZE);  // Automatically normalize normals
+    glShadeModel(GL_SMOOTH); // Enable smooth shading
 }
 
 // Called when the window is resized
@@ -31,7 +31,7 @@ void handleResize(int w, int h)
     glMatrixMode(GL_PROJECTION);
 
     glLoadIdentity();
-    gluPerspective(45.0, (double)w / (double)h, 10.0, 100.0);
+    gluPerspective(45.0, (double)w / (double)h, 10.0, -50.0);
     glShadeModel(GL_SMOOTH);
 }
 
@@ -300,30 +300,94 @@ void boat()
 void bucketOfNagordola()
 {
     glPushMatrix();
-    glRotated(30, 1, 0, 0);
-    glutSolidTorus(0.2, 0.8, 360, 360);
+    glTranslated(0, 0, 10);
+    glRotated(90, 1, 0, 0);
+    glScaled(1, 1, 5);
+    glutSolidTorus(0.2, 0.8, 36, 36);
     glPopMatrix();
 }
 
 void pole(double x, double y, double z, double w, double h)
 {
     glPushMatrix();
-    glTranslated(x, y, z);
+    glTranslated(x, y, z + 5);
     glScaled(w, h, 1);
     glRotated(90, 1, 0, 0);
-
-    // glutSolidTorus(0.2, 0.8, 360, 360);
-    // bucketOfNagordola();
+    glutSolidTorus(0.2, 0.8, 36, 36);
     glPopMatrix();
-}
-
-void roundablePole()
-{
 }
 
 void nagordola()
 {
-    pole(0, 4, 1, 1, 14);
+
+    pole(0, 0, 0, 1, 34);
+
+    // making center circle using torus
+    glPushMatrix();
+    glTranslated(0.4, 6.5, 13);
+    glRotated(angle, 0, 0, 1); /*Rotating Whole Nagordola*/
+    glutSolidTorus(0.4, 1.4, 30, 30);
+
+    /* Rotating Pole for bucket 1 and 4 */
+    glRotated(120, 0, 0, 1);
+    pole(0, 0, 0, 0.4, 34);
+    glPushMatrix();
+    /*Bucket 1*/
+    glPushMatrix();
+    glTranslated(0, -5.5, 0);
+    glRotated(-angle - 30, 0, 0, 1);
+    bucketOfNagordola();
+    glPopMatrix();
+    /*Bucket 2*/
+    glPushMatrix();
+    glTranslated(0, 5.5, 0);
+    glRotated(-angle - 30, 0, 0, 1);
+    bucketOfNagordola();
+    glPopMatrix();
+    glPopMatrix();
+
+    /* Rotating Pole for bucket 2 and 5 */
+    glRotated(120, 0, 0, 1);
+    pole(0, 0, 0, 0.4, 34);
+    glPushMatrix();
+    /*Bucket 2*/
+    glPushMatrix();
+    glTranslated(0, -5.5, 0);
+    glRotated(-angle + 30, 0, 0, 1);
+    bucketOfNagordola();
+    glPopMatrix();
+    /*Bucket 5*/
+    glPushMatrix();
+    glTranslated(0, 5.5, 0);
+    glRotated(-angle + 30, 0, 0, 1);
+    bucketOfNagordola();
+    glPopMatrix();
+    glPopMatrix();
+
+    /* Rotating Pole for bucket 3 and 6 */
+    glRotated(120, 0, 0, 1);
+    pole(0, 0, 0, 0.4, 34);
+    glPushMatrix();
+    /*Bucket 3*/
+    glPushMatrix();
+    glTranslated(0, -5.5, 0);
+    glRotated(-angle, 0, 0, 1);
+    bucketOfNagordola();
+    glPopMatrix();
+    /*Bucket 6*/
+    glPushMatrix();
+    glTranslated(0, 5.5, 0);
+    glRotated(-angle, 0, 0, 1);
+    bucketOfNagordola();
+    glPopMatrix();
+    glPopMatrix();
+
+    // glPushMatrix();
+    // // glRotated(-angle, 0, 0, 0.5);
+    // glTranslated(5.5, 2, 1);
+    // bucketOfNagordola();
+    // glPopMatrix();
+    glPopMatrix();
 }
 
 void sun()

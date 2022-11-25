@@ -50,7 +50,8 @@ void drawScene()
   glTranslatef(0.0f, 0.0f, -70.0f);
 
   // Add ambient light
-  GLfloat sp = sin(posSun);
+  // GLfloat sp = sin(posSun);
+  GLfloat sp = 1;
   GLfloat xSunLightPos = cos(posSun);
   GLfloat ySunLightPos = sin(posSun);
   GLfloat ambientColor[] = {sp, sp, sp, 1}; // Color (0.2, 0.2, 0.2)
@@ -61,7 +62,7 @@ void drawScene()
   GLfloat specularLightColor0[] = {0.2, 0.2, 0.2, 0.1f};
   GLfloat lightPos0[] = {xSunLightPos, ySunLightPos, 1, 1.0};
   glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuseLightColor0);
-  // glLightfv(GL_LIGHT0, GL_SPECULAR, specularLightColor0);
+  glLightfv(GL_LIGHT0, GL_SPECULAR, specularLightColor0);
   glLightfv(GL_LIGHT0, GL_POSITION, lightPos0);
 
   // Add directed light
@@ -72,7 +73,7 @@ void drawScene()
   glLightfv(GL_LIGHT1, GL_POSITION, lightPos1);
 
   glColor3f(1.0f, 1.0f, 0.0f);
-  // drawComponent(1.0, 1.2, 100, 100, nagordola);
+  drawComponent(-3, -10, 200, 200, nagordola);
 
   drawComponent(-12.0, 2.2, 1, 1, tree);
   drawComponent(-10.10, 1.1, 1, 1, tree);
@@ -121,10 +122,11 @@ int main(int argc, char **argv)
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
 
+  glutInitWindowPosition(10, 10);
   glutInitWindowSize(1200, 800);
 
   // Create the window
-  glutCreateWindow("Lighting Example");
+  glutCreateWindow("Village Fair Mini Project By Mahbub And Rakiba !");
   initRendering();
 
   // Set handler functions
