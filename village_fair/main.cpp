@@ -73,7 +73,11 @@ void drawScene()
   glLightfv(GL_LIGHT1, GL_POSITION, lightPos1);
 
   glColor3f(1.0f, 1.0f, 0.0f);
+
+  glPushMatrix();
+  glScaled(0.5, 0.5, 0.5); /*This is a 3d obj so we have to need Z axis too*/
   drawComponent(-3, -10, 200, 200, nagordola);
+  glPopMatrix();
 
   drawComponent(-12.0, 2.2, 1, 1, tree);
   drawComponent(-10.10, 1.1, 1, 1, tree);

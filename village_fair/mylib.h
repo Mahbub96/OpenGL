@@ -320,27 +320,28 @@ void pole(double x, double y, double z, double w, double h)
 void nagordola()
 {
 
+    double inc = 12;
+    double subInc = inc / 3;
     pole(0, 0, 0, 1, 34);
 
     // making center circle using torus
-    glPushMatrix();
     glTranslated(0.4, 6.5, 13);
     glRotated(angle, 0, 0, 1); /*Rotating Whole Nagordola*/
     glutSolidTorus(0.4, 1.4, 30, 30);
 
     /* Rotating Pole for bucket 1 and 4 */
     glRotated(120, 0, 0, 1);
-    pole(0, 0, 0, 0.4, 34);
+    pole(0, 0, 0, 0.4, 34 + inc);
     glPushMatrix();
     /*Bucket 1*/
     glPushMatrix();
-    glTranslated(0, -5.5, 0);
+    glTranslated(0, -5.5 - subInc, 0);
     glRotated(-angle - 30, 0, 0, 1);
     bucketOfNagordola();
     glPopMatrix();
     /*Bucket 2*/
     glPushMatrix();
-    glTranslated(0, 5.5, 0);
+    glTranslated(0, 5.5 + subInc, 0);
     glRotated(-angle - 30, 0, 0, 1);
     bucketOfNagordola();
     glPopMatrix();
@@ -348,17 +349,17 @@ void nagordola()
 
     /* Rotating Pole for bucket 2 and 5 */
     glRotated(120, 0, 0, 1);
-    pole(0, 0, 0, 0.4, 34);
+    pole(0, 0, 0, 0.4, 34 + inc);
     glPushMatrix();
     /*Bucket 2*/
     glPushMatrix();
-    glTranslated(0, -5.5, 0);
+    glTranslated(0, -5.5 - subInc, 0);
     glRotated(-angle + 30, 0, 0, 1);
     bucketOfNagordola();
     glPopMatrix();
     /*Bucket 5*/
     glPushMatrix();
-    glTranslated(0, 5.5, 0);
+    glTranslated(0, 5.5 + subInc, 0);
     glRotated(-angle + 30, 0, 0, 1);
     bucketOfNagordola();
     glPopMatrix();
@@ -366,27 +367,20 @@ void nagordola()
 
     /* Rotating Pole for bucket 3 and 6 */
     glRotated(120, 0, 0, 1);
-    pole(0, 0, 0, 0.4, 34);
+    pole(0, 0, 0, 0.4, 34 + inc);
     glPushMatrix();
     /*Bucket 3*/
     glPushMatrix();
-    glTranslated(0, -5.5, 0);
+    glTranslated(0, -5.5 - subInc, 0);
     glRotated(-angle, 0, 0, 1);
     bucketOfNagordola();
     glPopMatrix();
     /*Bucket 6*/
     glPushMatrix();
-    glTranslated(0, 5.5, 0);
+    glTranslated(0, 5.5 + subInc, 0);
     glRotated(-angle, 0, 0, 1);
     bucketOfNagordola();
     glPopMatrix();
-    glPopMatrix();
-
-    // glPushMatrix();
-    // // glRotated(-angle, 0, 0, 0.5);
-    // glTranslated(5.5, 2, 1);
-    // bucketOfNagordola();
-    // glPopMatrix();
     glPopMatrix();
 }
 
