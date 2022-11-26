@@ -18,6 +18,8 @@ void initRendering()
     glEnable(GL_LIGHTING);   // Enable lighting
     glEnable(GL_LIGHT0);     // Enable light #0
     glEnable(GL_LIGHT1);     // Enable light #1
+    glEnable(GL_LIGHT2);     // Enable light #2 for sun
+    glEnable(GL_LIGHT3);     // Enable light #3 for sun
     glEnable(GL_NORMALIZE);  // Automatically normalize normals
     glShadeModel(GL_SMOOTH); // Enable smooth shading
 }
@@ -386,7 +388,23 @@ void nagordola()
 
 void sun()
 {
+    double xSun = cos(posSun);
+    double ySun = sin(posSun);
+    GLfloat sunLightColor[] = {0.8, 0.8, 0.8, 1.0}; /* like intensity of light */
+    glLightModelfv(GL_LIGHT_MODEL_AMBIENT, sunLightColor);
+    GLfloat lightColor[] = {1, 1, 1, 1};
+    GLfloat lightPos[] = {xSun * 45, ySun * 25, 1, 1};
 
+    glLightfv(GL_LIGHT2, GL_DIFFUSE, lightColor);
+    glLightfv(GL_LIGHT2, GL_POSITION, lightPos);
+
+    GLfloat lightColor1[] = {0.5, 0.2, 0.2, 1};
+    GLfloat lightPos1[] = {xSun * 45, ySun * 25, 1, 0};
+
+    glLightfv(GL_LIGHT3, GL_DIFFUSE, lightColor1);
+    glLightfv(GL_LIGHT3, GL_POSITION, lightPos1);
+
+    glNormal3f(0.0, 0.0, -1);
     glTranslated(0, 0, -20);
     glNormal3d(0, 0, -1);
     glutSolidSphere(10, 100, 100);

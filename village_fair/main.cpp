@@ -67,7 +67,7 @@ void drawScene()
   // Add positioned light
   GLfloat diffuseLightColor0[] = {1, 1, 1, 1.0};
   GLfloat specularLightColor0[] = {0.2, 0.2, 0.2, 0.1f};
-  GLfloat lightPos0[] = {xSunLightPos, ySunLightPos, 1, 1.0};
+  GLfloat lightPos0[] = {xSunLightPos * 45, ySunLightPos * 25, 1, 1.0};
   glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuseLightColor0);
   glLightfv(GL_LIGHT0, GL_SPECULAR, specularLightColor0);
   glLightfv(GL_LIGHT0, GL_POSITION, lightPos0);
