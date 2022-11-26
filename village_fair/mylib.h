@@ -16,10 +16,7 @@ void initRendering()
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_COLOR_MATERIAL);
     glEnable(GL_LIGHTING);   // Enable lighting
-    glEnable(GL_LIGHT0);     // Enable light #0
-    glEnable(GL_LIGHT1);     // Enable light #1
-    glEnable(GL_LIGHT2);     // Enable light #2 for sun
-    glEnable(GL_LIGHT3);     // Enable light #3 for sun
+    glEnable(GL_LIGHT0);     // Enable light #0    // Enable light #1
     glEnable(GL_NORMALIZE);  // Automatically normalize normals
     glShadeModel(GL_SMOOTH); // Enable smooth shading
 }
@@ -44,7 +41,7 @@ void update()
     c2 > 48 ? c2 = -48 : c2 += 0.02 * running;
     c3 > 48 ? c3 = -48 : c3 += 0.01 * running;
 
-    posSun < -6.2 ? posSun = -3 : posSun -= 0.001 * running;
+    posSun < -7 ? posSun = -3 : posSun -= 0.001 * running;
     angle > 360 ? angle = -360 : angle += 1 * running;
 
     glutPostRedisplay();
@@ -388,23 +385,24 @@ void nagordola()
 
 void sun()
 {
-    double xSun = cos(posSun);
-    double ySun = sin(posSun);
-    GLfloat sunLightColor[] = {0.8, 0.8, 0.8, 1.0}; /* like intensity of light */
-    glLightModelfv(GL_LIGHT_MODEL_AMBIENT, sunLightColor);
-    GLfloat lightColor[] = {1, 1, 1, 1};
-    GLfloat lightPos[] = {xSun * 45, ySun * 25, 1, 1};
 
-    glLightfv(GL_LIGHT2, GL_DIFFUSE, lightColor);
-    glLightfv(GL_LIGHT2, GL_POSITION, lightPos);
+    GLfloat sp = sin(posSun);
+    // std::cout << sp << std::endl;
+    sp > 0.15 ? sp : sp -= 0.2; /* Making forcefully Deep night */
+    GLfloat xSunLightPos = cos(posSun);
+    GLfloat ySunLightPos = sin(posSun);
+    GLfloat ambientColor[] = {sp, sp, sp, 0.1};
+    glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambientColor);
 
-    GLfloat lightColor1[] = {0.5, 0.2, 0.2, 1};
-    GLfloat lightPos1[] = {xSun * 45, ySun * 25, 1, 0};
+    // Add positioned light
+    GLfloat diffuseLightColor0[] = {0.8, 0.8, 0.8, 0.9};
+    GLfloat specularLightColor0[] = {0.2, 0.2, 0.2, 0.1f};
+    GLfloat lightPos0[] = {xSunLightPos * 45, ySunLightPos * 25, 1, 1.0};
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuseLightColor0);
+    glLightfv(GL_LIGHT0, GL_SPECULAR, specularLightColor0);
+    glLightfv(GL_LIGHT0, GL_POSITION, lightPos0);
 
-    glLightfv(GL_LIGHT3, GL_DIFFUSE, lightColor1);
-    glLightfv(GL_LIGHT3, GL_POSITION, lightPos1);
-
-    glNormal3f(0.0, 0.0, -1);
+    // glNormal3f(0.0, -1.0, -1.0);
     glTranslated(0, 0, -20);
     glNormal3d(0, 0, -1);
     glutSolidSphere(10, 100, 100);

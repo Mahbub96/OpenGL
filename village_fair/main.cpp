@@ -56,30 +56,7 @@ void drawScene()
   glLoadIdentity();
   glTranslatef(0.0f, 0.0f, -70.0f);
 
-  // Add ambient light
-  GLfloat sp = sin(posSun);
-  // GLfloat sp = 1;
-  GLfloat xSunLightPos = cos(posSun);
-  GLfloat ySunLightPos = sin(posSun);
-  GLfloat ambientColor[] = {sp, sp, sp, 1}; // Color (0.2, 0.2, 0.2)
-  glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambientColor);
-
-  // Add positioned light
-  GLfloat diffuseLightColor0[] = {1, 1, 1, 1.0};
-  GLfloat specularLightColor0[] = {0.2, 0.2, 0.2, 0.1f};
-  GLfloat lightPos0[] = {xSunLightPos * 45, ySunLightPos * 25, 1, 1.0};
-  glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuseLightColor0);
-  glLightfv(GL_LIGHT0, GL_SPECULAR, specularLightColor0);
-  glLightfv(GL_LIGHT0, GL_POSITION, lightPos0);
-
-  // Add directed light
-  GLfloat lightColor1[] = {0.5f, 0.2f, 0.2f, 1.0f}; // Color (0.5, 0.2, 0.2)
-  // Coming from the direction (-1, 0.5, 0.5)
-  GLfloat lightPos1[] = {xSunLightPos, ySunLightPos, 1.0f, 1.0f};
-  glLightfv(GL_LIGHT1, GL_DIFFUSE, lightColor1);
-  glLightfv(GL_LIGHT1, GL_POSITION, lightPos1);
-
-  glColor3f(1.0f, 1.0f, 0.0f);
+  // glColor3f(1.0f, 1.0f, 0.0f);
 
   glPushMatrix();
   glScaled(0.5, 0.5, 0.5); /*This is a 3d obj so we have to need Z axis too*/
