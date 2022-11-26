@@ -19,18 +19,25 @@ void handleKeypress(unsigned char key, int x, int y)
 
   switch (key)
   {
-  case 'a':
-    glDisable(GL_LIGHT0);
+
+  case 'f':
+    running *= 2;
     break;
   case 's':
-    glEnable(GL_LIGHT0);
+    running /= 2;
+    break;
+  case 'b':
+    running = !running;
     break;
 
-  case 'd':
-    glDisable(GL_LIGHT1);
+  case 'l':
+    isLight0On ? glDisable(GL_LIGHT0) : glEnable(GL_LIGHT0);
+    isLight0On = !isLight0On;
     break;
-  case 'f':
-    glEnable(GL_LIGHT1);
+
+  case 'k':
+    isLight1On ? glDisable(GL_LIGHT1) : glEnable(GL_LIGHT1);
+    isLight1On = !isLight1On;
     break;
   case 27: // Escape key
     exit(0);
@@ -50,8 +57,8 @@ void drawScene()
   glTranslatef(0.0f, 0.0f, -70.0f);
 
   // Add ambient light
-  // GLfloat sp = sin(posSun);
-  GLfloat sp = 1;
+  GLfloat sp = sin(posSun);
+  // GLfloat sp = 1;
   GLfloat xSunLightPos = cos(posSun);
   GLfloat ySunLightPos = sin(posSun);
   GLfloat ambientColor[] = {sp, sp, sp, 1}; // Color (0.2, 0.2, 0.2)
@@ -76,6 +83,7 @@ void drawScene()
 
   glPushMatrix();
   glScaled(0.5, 0.5, 0.5); /*This is a 3d obj so we have to need Z axis too*/
+  glColor3ub(0, 0, 0);
   drawComponent(-3, -10, 200, 200, nagordola);
   glPopMatrix();
 
@@ -84,10 +92,6 @@ void drawScene()
   drawComponent(-10.0, 1.2, 1, 1, tree);
   drawComponent(-10.8, 1.0, 1, 1, tree);
   drawComponent(-10, 3.7, 1, 1, tree);
-
-  drawComponent(-40, 1.8, 8, 8, hill);
-  drawComponent(-32, 2.8, 7, 7, hill);
-  drawComponent(-50, 2.3, 10, 10, hill);
 
   // glPushMatrix();
 
@@ -110,6 +114,16 @@ void drawScene()
   drawComponent(-4, 0.5, 8, 8, stall);
   drawComponent(-3.2, 0.9, 7, 7, stall);
   drawComponent(-2.8, 1.2, 6, 6, stall);
+
+  /* Rendering Hills */
+
+  drawComponent(-20, 5.5, 6, 12, hill);
+  drawComponent(-9, 7, 8, 8, hill);
+  drawComponent(8, 7, 7, 14, hill);
+  drawComponent(-3, 7, 6, 14, hill);
+  drawComponent(-40, 6.5, 7, 12, hill);
+
+  drawComponent(-20, 0, 100, 100, belun);
 
   glPushMatrix();
   drawComponent(0, 0, 100, 100, background);

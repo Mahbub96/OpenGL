@@ -5,7 +5,7 @@
 #include <iostream>
 
 using namespace std;
-
+double running = 1, isLight0On = 1, isLight1On = 1;
 double dx = 0.01, dy, c1 = -48, c2 = -48, c3 = -48, bx = 0, by = 0, posSun = -3;
 double width, height;
 double angle = 0;
@@ -38,12 +38,12 @@ void handleResize(int w, int h)
 void update()
 {
 
-    c1 > 48 ? c1 = -48 : c1 += 0.03;
-    c2 > 48 ? c2 = -48 : c2 += 0.02;
-    c3 > 48 ? c3 = -48 : c3 += 0.01;
+    c1 > 48 ? c1 = -48 : c1 += 0.03 * running;
+    c2 > 48 ? c2 = -48 : c2 += 0.02 * running;
+    c3 > 48 ? c3 = -48 : c3 += 0.01 * running;
 
-    posSun < -6.2 ? posSun = -3 : posSun -= 0.001;
-    angle > 360 ? angle = -360 : angle += 1;
+    posSun < -6.2 ? posSun = -3 : posSun -= 0.001 * running;
+    angle > 360 ? angle = -360 : angle += 1 * running;
 
     glutPostRedisplay();
 }
@@ -390,6 +390,17 @@ void sun()
     glTranslated(0, 0, -20);
     glNormal3d(0, 0, -1);
     glutSolidSphere(10, 100, 100);
+}
+
+void belun()
+{
+    glPushMatrix();
+    glColor3ub(51, 153, 255);
+    glScaled(1, 2, 1);
+    glutSolidSphere(3, 100, 100);
+
+    glutSolidTorus(1, 2, 200, 200);
+    glPopMatrix();
 }
 
 void background()
