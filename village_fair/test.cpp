@@ -1,5 +1,6 @@
 #include "mylib.h"
 
+double spinAngle = 0;
 void init();
 void draw();
 void reshape(int w, int h);
@@ -7,7 +8,58 @@ void normalKeypress(unsigned char key, int x, int y);
 void specialKeypress(int key, int x, int y);
 void mousePress(int button, int state, int x, int y);
 
-static GLfloat spinAngle = 0.0;
+void update1()
+{
+    spinAngle += 1;
+    glutPostRedisplay();
+}
+
+void cube()
+{
+
+    glColor3f(1.0f, 0.0f, 0.0f);
+    glBegin(GL_QUADS);
+    glVertex3f(3, 3, 3);
+    glVertex3f(-3, 3, 3);
+    glVertex3f(-3, -3, 3);
+    glVertex3f(3, -3, 3);
+
+    /// back
+    glColor3f(0.0f, 1.0f, 0.0f);
+    glVertex3f(3, 3, -3);
+    glVertex3f(-3, 3, -3);
+    glVertex3f(-3, -3, -3);
+    glVertex3f(3, -3, -3);
+
+    /// left side
+    glColor3f(0.0f, 0.0f, 1.0f);
+    glVertex3f(-3, 3, 3);
+    glVertex3f(-3, 3, -3);
+    glVertex3f(-3, -3, -3);
+    glVertex3f(-3, -3, 3);
+
+    /// right side
+    glColor3f(1.0f, 0.0f, 1.0f);
+    glVertex3f(3, 3, 3);
+    glVertex3f(3, 3, -3);
+    glVertex3f(3, -3, -3);
+    glVertex3f(3, -3, 3);
+
+    /// top side
+    glColor3f(0.5f, 0.7f, 1.0f);
+    glVertex3f(-3, 3, -3);
+    glVertex3f(3, 3, -3);
+    glVertex3f(3, 3, 3);
+    glVertex3f(-3, 3, 3);
+
+    /// bottom side
+    glColor3f(1.0f, 1.0f, 0.0f);
+    glVertex3f(-3, -3, -3);
+    glVertex3f(3, -3, -3);
+    glVertex3f(3, -3, 3);
+    glVertex3f(-3, -3, 3);
+    glEnd();
+}
 
 int main(int argc, char **argv)
 {
@@ -39,7 +91,7 @@ void reshape(int w, int h)
     glViewport(0, 0, w, h);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluOrtho2D(-600, 600, -600, 600);
+    glOrtho(-10, 10, -10, 10, -10, 10);
     glMatrixMode(GL_MODELVIEW);
 }
 
@@ -49,36 +101,10 @@ void draw()
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     // draw base of nagordola
-    glColor3f(0.196, 0.15, 0.15);
-    glRectf(-125, -450, 175, -600);
+    glRotated(spinAngle, 1, 1, 1);
+    cube();
 
-    // draw bar of nagordola
-    glColor3f(0.188, 0.192, 0.44);
-    glRectf(0, 100, 50, -450);
-
-    // body that hold every nagordola seat
-    glColor3f(0.6, 0.04, .90);
-    glRectf(-100, 350, 150, 100);
-
-    glPushMatrix();
-    glRotatef(spinAngle, 0.0, 0.0, 1.0);
-    // left seat handler of nagor dola
-    glColor3f(.95, .44, 0.47);
-    glRectf(-150, 300, -100, 150);
-
-    // left seat of nagor dola
-    glColor3f(0.37, .88, 0.03);
-    glRectf(-450, 350, -150, 100);
-
-    // right seat handler of nagor dola
-    glColor3f(.95, .44, 0.47);
-    glRectf(150, 300, 200, 150);
-
-    // right seat of nagor dola
-    glColor3f(0.45, 0.32, 0.886);
-    glRectf(200, 350, 500, 100);
-    glPopMatrix();
-
+    update1();
     glutSwapBuffers();
 }
 // spin to left

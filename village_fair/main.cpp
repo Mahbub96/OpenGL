@@ -59,44 +59,46 @@ void drawScene()
   // glColor3f(1.0f, 1.0f, 0.0f);
 
   glPushMatrix();
-  glScaled(0.5, 0.5, 0.5); /*This is a 3d obj so we have to need Z axis too*/
+  glScaled(0.5, 0.5, 0.5); /*This is a 3d obj so we need Z axis too*/
   glColor3ub(0, 0, 0);
-  drawComponent(-3, -10, 200, 200, nagordola);
+  // drawComponent(-3, -10, 200, 200, nagordola);
   glPopMatrix();
 
-  drawComponent(-12.0, 2.2, 1, 1, tree);
-  drawComponent(-10.10, 1.1, 1, 1, tree);
-  drawComponent(-10.0, 1.2, 1, 1, tree);
-  drawComponent(-10.8, 1.0, 1, 1, tree);
-  drawComponent(-10, 3.7, 1, 1, tree);
+  glPushMatrix();
 
-  // glPushMatrix();
+  glRotated(40, 1, 0, 0);
+  glRotated(70, 1, 0, 0);
+  drawComponent(2, -7, 5, 1, river);
 
-  // glRotated(40, 1, 0, 0);
-  // glRotated(70, 1, 0, 0);
-  // river(2, -7, 5, 1);
-  // // boat(0, 0, 10, 1);
-  // glPopMatrix();
+  glPopMatrix();
 
-  drawComponent(c1 + 0, 20.5 + 2 + sin(c1 / 5), 1.5, 1.5, cloud);
-  drawComponent(c1 + 3, 20.5 + 3 + sin(c1 / 7), 1.5, 1.5, cloud);
-  drawComponent(c1 + 5, 20.5 + 0 + sin(c1 / 3), 1.5, 1.5, cloud);
-  drawComponent(c2, 16.4, 1.10, 1.10, cloud);
-  drawComponent(c3, 10.5, 0.9, 0.9, cloud);
+  drawComponent(c1 - 10, 23, 2, 2.5, cloud);
+  drawComponent(c1 + 13, 25, 2.5, 3.5, cloud);
+  drawComponent(c1 + 20, 20, 1.5, 1.5, cloud);
 
-  drawComponent(3.2, 0.3, 1.5, 1.5, tree); /*jumbo tree*/
+  drawComponent(c1 - 40, 23, 2, 2.5, cloud);
+  drawComponent(c1 - 30, 25, 2.5, 3.5, cloud);
+  drawComponent(c1 + 60, 20, 1.5, 1.5, cloud);
 
-  drawComponent(-6.2, -0.7, 10, 10, stall);
-  drawComponent(-5, 0, 9, 9, stall);
+  drawComponent(-6.2, -0.7, 100, 100, stall);
+  drawComponent(-15, 0, 100, 100, stall);
   drawComponent(-4, 0.5, 8, 8, stall);
   drawComponent(-3.2, 0.9, 7, 7, stall);
   drawComponent(-2.8, 1.2, 6, 6, stall);
 
+  /* Trees  */
+
+  drawComponent(-24.5, 11.2, 1.6, 2, tree);
+  drawComponent(38, -3, 10, 9, tree);
+
   /* Rendering Hills */
 
-  drawComponent(-20, 5.5, 6, 12, hill);
+  drawComponent(-20, 7.2, 6, 12, hill);
   drawComponent(-9, 7, 8, 8, hill);
   drawComponent(8, 7, 7, 14, hill);
+  drawComponent(18, 8, 6, 10, hill);
+  drawComponent(30, 7, 10, 10, hill);
+  drawComponent(40, 8, 10, 14, hill);
   drawComponent(-3, 7, 6, 14, hill);
   drawComponent(-40, 6.5, 7, 12, hill);
 
@@ -117,7 +119,7 @@ int main(int argc, char **argv)
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
 
-  glutInitWindowPosition(10, 10);
+  glutInitWindowPosition(1600, 10);
   glutInitWindowSize(1200, 800);
 
   // Create the window

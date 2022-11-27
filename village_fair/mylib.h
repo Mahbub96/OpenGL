@@ -5,11 +5,13 @@
 #include <iostream>
 
 using namespace std;
+
 double running = 1, isLight0On = 1, isLight1On = 1;
 double dx = 0.01, dy, c1 = -48, c2 = -48, c3 = -48, bx = 0, by = 0, posSun = -3;
 double width, height;
 double angle = 0;
 
+void human_for_stall();
 // Initializes 3D rendering
 void initRendering()
 {
@@ -30,7 +32,7 @@ void handleResize(int w, int h)
     glMatrixMode(GL_PROJECTION);
 
     glLoadIdentity();
-    gluPerspective(45.0, (double)w / (double)h, 10.0, -50.0);
+    gluPerspective(45.0, (double)w / (double)h, 5.0, -40.0);
     glShadeModel(GL_SMOOTH);
 }
 
@@ -84,6 +86,7 @@ void rect(int x, int y, double h, double w, double d)
 
 void cloud()
 {
+    glTranslated(0, 0, -3);
     glColor3ub(255, 255, 255);
     circleFill(0, 0, 100, 100, 0);
     circleFill(100, 0, 100, 100, 0);
@@ -250,8 +253,8 @@ void stall()
     glColor3f(0.7f, 0.5f, 0.0f);
     square_table(3, -2, -9, -7.5);
     square_table(2.5, -2, 9, -7.5);
-
-    glPopMatrix();
+    glTranslated(0, -0.3, 5);
+    human_for_stall();
 }
 
 void hill()
@@ -387,11 +390,10 @@ void sun()
 {
 
     GLfloat sp = sin(posSun);
-    // std::cout << sp << std::endl;
     sp > 0.15 ? sp : sp -= 0.2; /* Making forcefully Deep night */
     GLfloat xSunLightPos = cos(posSun);
     GLfloat ySunLightPos = sin(posSun);
-    GLfloat ambientColor[] = {sp, sp, sp, 0.1};
+    GLfloat ambientColor[] = {1, 1, 1, 0.1};
     glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambientColor);
 
     // Add positioned light
@@ -414,8 +416,15 @@ void belun()
     glColor3ub(51, 153, 255);
     glScaled(1, 2, 1);
     glutSolidSphere(3, 100, 100);
+    glPopMatrix();
 
-    glutSolidTorus(1, 2, 200, 200);
+    /* handle of belun */
+    glPushMatrix();
+    glColor3ub(220, 25, 25);
+    glTranslated(0, -5, 0);
+    glRotated(90, 1, 0, 0);
+    glScaled(0.1, 0.1, 10);
+    glutSolidTorus(1, 1, 20, 20);
     glPopMatrix();
 }
 
@@ -425,10 +434,66 @@ void background()
 
     glPushMatrix();
     glColor3ub(249, 215, 25);
-    glTranslated(cos(posSun) * 45, sin(posSun) * 25, 1);
+    glTranslated(cos(posSun) * 45, sin(posSun) * 25, 3.0);
     glScaled(0.3, 0.3, 0.3);
     sun();
     glPopMatrix();
 
     ground();
+}
+
+void circle(float radiusX, float radiusY, float z, int loop)
+{
+    float angle = 0.0;
+    glPushMatrix();
+    glBegin(GL_POLYGON);
+    for (int i = 0; i < loop; i++)
+    {
+        angle = 2 * 3.1416 * i / 100;
+        glVertex3d(radiusX * cos(angle), radiusY * sin(angle), z);
+    }
+    glEnd();
+    glPopMatrix();
+}
+
+void human_for_stall()
+{
+    glPushMatrix();
+    /// head
+    glColor3ub(238, 213, 183);
+    glScaled(0.9, 1.0, 0.01);
+    glutSolidTorus(0.7, 0.7, 10, 10);
+    /// hair
+    glColor3ub(0, 0, 0);
+
+    circle(1.3, 1.4, 1.1, 50);
+
+    glPushMatrix();
+    glTranslated(-0.4, -0.5, 1);
+    glRotated(45, 1, 1, 0);
+    glPopMatrix();
+
+    /// neck
+    glColor3ub(238, 213, 183);
+    glTranslated(0, -1.2, 0);
+    glScaled(0.6, 1.0, 0.01);
+    glutSolidTorus(0.6, 0.6, 10, 10);
+    /// body
+    glPushMatrix();
+    glColor3d(0, 0, 1);
+    glTranslated(0, -0.7, 0);
+    glBegin(GL_POLYGON);
+    glVertex3d(0, 0, 1);
+    glVertex3d(1.2, 0.3, 1);
+    glVertex3d(2.5, -0.5, 1);
+    glVertex3d(2.5, -1.5, 1);
+    glVertex3d(1.8, -1.5, 1);
+    glVertex3d(-1.8, -1.5, 1);
+    glVertex3d(-2.5, -1.5, 1);
+    glVertex3d(-2.5, -0.5, 1);
+    glVertex3d(-1.2, 0.3, 1);
+
+    glEnd();
+    glPopMatrix();
+    glPopMatrix();
 }
