@@ -58,19 +58,19 @@ void drawScene()
 
   // glColor3f(1.0f, 1.0f, 0.0f);
 
-  glPushMatrix();
-  glScaled(0.5, 0.5, 0.5); /*This is a 3d obj so we need Z axis too*/
-  glColor3ub(0, 0, 0);
+  // glPushMatrix();
+  // glScaled(0.5, 0.5, 0.5); /*This is a 3d obj so we need Z axis too*/
+  // glColor3ub(0, 0, 0);
   // drawComponent(-3, -10, 200, 200, nagordola);
-  glPopMatrix();
+  // glPopMatrix();
 
-  glPushMatrix();
+  // glPushMatrix();
 
-  glRotated(40, 1, 0, 0);
-  glRotated(70, 1, 0, 0);
-  drawComponent(2, -7, 5, 1, river);
+  // glRotated(40, 1, 0, 0);
+  // glRotated(70, 1, 0, 0);
+  // drawComponent(2, -7, 5, 1, river);
 
-  glPopMatrix();
+  // glPopMatrix();
 
   drawComponent(c1 - 10, 23, 2, 2.5, cloud);
   drawComponent(c1 + 13, 25, 2.5, 3.5, cloud);
@@ -80,11 +80,9 @@ void drawScene()
   drawComponent(c1 - 30, 25, 2.5, 3.5, cloud);
   drawComponent(c1 + 60, 20, 1.5, 1.5, cloud);
 
+  /* stalls  */
   drawComponent(-6.2, -0.7, 100, 100, stall);
-  drawComponent(-15, 0, 100, 100, stall);
-  drawComponent(-4, 0.5, 8, 8, stall);
-  drawComponent(-3.2, 0.9, 7, 7, stall);
-  drawComponent(-2.8, 1.2, 6, 6, stall);
+  drawComponent(-6.2, -0.7, 100, 100, stall);
 
   /* Trees  */
 
@@ -102,7 +100,7 @@ void drawScene()
   drawComponent(-3, 7, 6, 14, hill);
   drawComponent(-40, 6.5, 7, 12, hill);
 
-  drawComponent(-20, 0, 100, 100, belun);
+  // drawComponent(-20, 0, 100, 100, belun);
 
   glPushMatrix();
   drawComponent(0, 0, 100, 100, background);

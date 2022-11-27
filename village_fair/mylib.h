@@ -253,7 +253,9 @@ void stall()
     glColor3f(0.7f, 0.5f, 0.0f);
     square_table(3, -2, -9, -7.5);
     square_table(2.5, -2, 9, -7.5);
-    glTranslated(0, -0.3, 5);
+
+    glTranslated(0, 0.7, 5);
+    glScaled(1, 0.8, 1);
     human_for_stall();
 }
 
@@ -459,6 +461,41 @@ void circle(float radiusX, float radiusY, float z, int loop)
 void human_for_stall()
 {
     glPushMatrix();
+    /* Eyes */
+    glPushMatrix();
+    glScaled(0.08, 0.05, 0.05);
+    glTranslated(-6, -4, 0);
+
+    glColor3ub(238, 238, 224);
+    glutSolidTorus(1, 2, 16, 16);
+
+    glTranslated(12, 0, 0);
+    glColor3ub(238, 238, 224);
+    glutSolidTorus(1, 2, 16, 16);
+
+    /* Eye Ball */
+    glPushMatrix();
+    glColor3ub(51, 51, 51);
+    glTranslated(0, 0, 0);
+    glutSolidSphere(1, 20, 20);
+    glTranslated(-12, 0, 0);
+    glutSolidSphere(1, 20, 20);
+    glPopMatrix();
+
+    /* Nose */
+    glPushMatrix();
+    glColor3ub(139, 121, 94);
+    glTranslated(-6, -7.5, 0);
+    glRotated(-90, 1, 0, 0);
+    glutSolidCone(1.5, 7, 16, 16);
+
+    /* Lips */
+    glColor3ub(210, 105, 30);
+    glTranslated(0, -50, 0);
+    glScaled(1.1, 1, 1);
+    glutSolidTorus(1, 2, 20, 20);
+    glPopMatrix();
+    glPopMatrix();
     /// head
     glColor3ub(238, 213, 183);
     glScaled(0.9, 1.0, 0.01);
