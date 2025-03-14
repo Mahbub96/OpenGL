@@ -1,186 +1,226 @@
-let sun, earth, moon;
-let G = 0.2;
-let orbitPath = [];
-let moonOrbitPath = [];
-let grid = [];
-let gridSpacing = 30;
-let curvatureIntensity = 0.8;
-let deltaTime = 0.8;
+let simulation;
 
 function setup() {
-  createCanvas(1200, 800, WEBGL);
-  angleMode(DEGREES);
-
-  // Initialize celestial bodies with realistic parameters
-  sun = {
-    position: createVector(0, 0),
-    mass: 100500,
-    radius: 50,
-    velocity: createVector(0, 0),
-    color: [255, 225, 50]
-  };
-
-  earth = {
-    position: createVector(300, 0),
-    mass: 3600,
-    radius: 10,
-    velocity: createVector(0, 8.5),
-    color: [70, 130, 200]
-  };
-
-  moon = {
-    position: createVector(earth.position.x + 35, earth.position.y),
-    mass: 100,
-    radius: 3,
-    velocity: createVector(0, 4.2).add(earth.velocity),
-    color: [200, 200, 200]
-  };
-
-  createGrid();
-  noStroke();
-}
-
-function createGrid() {
-  grid = [];
-  const range = 400;
-  for (let x = -range; x <= range; x += gridSpacing) {
-    let col = [];
-    for (let y = -range; y <= range; y += gridSpacing) {
-      col.push(createVector(x, y, 0));
-    }
-    grid.push(col);
-  }
+  simulation = new Simulation();
+  simulation.setup();
 }
 
 function draw() {
-  background(0);
-  lights();
-  orbitControl(1, 1, 0.1);
-  
-  // Camera adjustment for better view
-  translate(-width/4.5, -height/4.5);
-  scale(0.75);
-
-  updatePhysics();
-  drawSpacetimeFabric();
-  drawCelestialBodies();
-  drawOrbitPaths();
-}
-
-function updatePhysics() {
-  // Calculate gravitational interactions
-  const earthSunForce = calculateGravity(earth, sun);
-  const moonSunForce = calculateGravity(moon, sun);
-  const moonEarthForce = calculateGravity(moon, earth);
-
-  // Update velocities (Earth primarily affected by Sun, Moon by both Earth and Sun)
-  earth.velocity.add(p5.Vector.div(earthSunForce, earth.mass).mult(deltaTime));
-  moon.velocity.add(p5.Vector.div(moonSunForce.add(moonEarthForce), moon.mass).mult(deltaTime));
-
-  // Update positions
-  earth.position.add(p5.Vector.mult(earth.velocity, deltaTime));
-  moon.position.add(p5.Vector.mult(moon.velocity, deltaTime));
-
-  // Update spacetime curvature
-  updateSpacetimeCurvature();
-  
-  // Store orbital paths
-  orbitPath.push(earth.position.copy());
-  moonOrbitPath.push(moon.position.copy());
-  if (orbitPath.length > 400) orbitPath.shift();
-  if (moonOrbitPath.length > 100) moonOrbitPath.shift();
-}
-
-function calculateGravity(body1, body2) {
-  const direction = p5.Vector.sub(body2.position, body1.position);
-  const distance = direction.mag();
-  direction.normalize();
-  const strength = (G * body1.mass * body2.mass) / (distance * distance);
-  return direction.mult(strength);
-}
-
-function updateSpacetimeCurvature() {
-  for (let x = 0; x < grid.length; x++) {
-    for (let y = 0; y < grid[x].length; y++) {
-      const point = grid[x][y];
-      const dSun = dist(point.x, point.y, sun.position.x, sun.position.y);
-      const dEarth = dist(point.x, point.y, earth.position.x, earth.position.y);
-      const dMoon = dist(point.x, point.y, moon.position.x, moon.position.y);
-      
-      // Realistic curvature proportions
-      point.z = (-sun.mass * 0.8)/(dSun + 10) - 
-                (earth.mass * 0.15)/(dEarth + 20) -
-                (moon.mass * 0.05)/(dMoon + 30);
-    }
-  }
-}
-
-function drawSpacetimeFabric() {
-  stroke(120, 180, 255, 120);
-  strokeWeight(1.2);
-  noFill();
-  
-  for (let x = 0; x < grid.length - 1; x++) {
-    for (let y = 0; y < grid[x].length - 1; y++) {
-      beginShape();
-      vertex(grid[x][y].x, grid[x][y].y, grid[x][y].z * 1000);
-      vertex(grid[x+1][y].x, grid[x+1][y].y, grid[x+1][y].z * 1000);
-      vertex(grid[x+1][y+1].x, grid[x+1][y+1].y, grid[x+1][y+1].z * 1000);
-      vertex(grid[x][y+1].x, grid[x][y+1].y, grid[x][y+1].z * 1000);
-      endShape(CLOSE);
-    }
-  }
-}
-
-function drawCelestialBodies() {
-  // Draw Sun
-  push();
-  translate(sun.position.x, sun.position.y);
-  emissiveMaterial(...sun.color);
-  pointLight(255, 255, 220, 0, 0, 0);
-  sphere(sun.radius);
-  pop();
-
-  // Draw Earth
-  push();
-  translate(earth.position.x, earth.position.y);
-  emissiveMaterial(...earth.color);
-  sphere(earth.radius);
-  pop();
-
-  // Draw Moon
-  push();
-  translate(moon.position.x, moon.position.y);
-  emissiveMaterial(...moon.color);
-  sphere(moon.radius);
-  pop();
-}
-
-function drawOrbitPaths() {
-  // Earth's orbit path
-  noFill();
-  stroke(50, 200, 100, 150);
-  beginShape();
-  orbitPath.forEach(pos => vertex(pos.x, pos.y));
-  endShape();
-
-  // Moon's orbit path
-  stroke(180, 180, 180, 120);
-  beginShape();
-  moonOrbitPath.forEach(pos => vertex(pos.x, pos.y));
-  endShape();
+  simulation.draw();
 }
 
 function keyPressed() {
-  if (key === 'p' || key === 'P') {
-    togglePause();
+  simulation.keyPressed();
+}
+
+class CelestialBody {
+  constructor(position, mass, radius, velocity, color, curvatureMultiplier = 0, curvatureOffset = 0, isLightSource = false) {
+    this.position = position.copy();
+    this.mass = mass;
+    this.radius = radius;
+    this.velocity = velocity.copy();
+    this.color = color;
+    this.curvatureMultiplier = curvatureMultiplier;
+    this.curvatureOffset = curvatureOffset;
+    this.isLightSource = isLightSource;
+  }
+
+  applyForce(force, deltaTime) {
+    let acceleration = p5.Vector.div(force, this.mass);
+    acceleration.mult(deltaTime);
+    this.velocity.add(acceleration);
+  }
+
+  update(deltaTime) {
+    this.position.add(p5.Vector.mult(this.velocity, deltaTime));
+  }
+
+  draw() {
+    push();
+    translate(this.position.x, this.position.y);
+    if (this.isLightSource) {
+      pointLight(255, 255, 220, 0, 0, 0);
+    }
+    emissiveMaterial(...this.color);
+    sphere(this.radius);
+    pop();
+  }
+
+  static calculateGravity(body1, body2, G) {
+    const direction = p5.Vector.sub(body2.position, body1.position);
+    const distance = direction.mag();
+    if (distance === 0) return createVector(0, 0);
+    direction.normalize();
+    const strength = (G * body1.mass * body2.mass) / (distance * distance);
+    return direction.mult(strength);
   }
 }
 
-function togglePause() {
-  if (isLooping()) {
-    noLoop();
-  } else {
-    loop();
+class OrbitPath {
+  constructor(maxLength) {
+    this.points = [];
+    this.maxLength = maxLength;
+  }
+
+  addPosition(position) {
+    this.points.push(position.copy());
+    if (this.points.length > this.maxLength) this.points.shift();
+  }
+
+  draw(col) {
+    noFill();
+    stroke(col);
+    beginShape();
+    this.points.forEach(pos => vertex(pos.x, pos.y));
+    endShape();
+  }
+}
+
+class SpacetimeGrid {
+  constructor(gridSpacing, range, curvatureScale) {
+    this.gridSpacing = gridSpacing;
+    this.range = range;
+    this.curvatureScale = curvatureScale;
+    this.grid = [];
+    this.createGrid();
+  }
+
+  createGrid() {
+    for (let x = -this.range; x <= this.range; x += this.gridSpacing) {
+      let col = [];
+      for (let y = -this.range; y <= this.range; y += this.gridSpacing) {
+        col.push(createVector(x, y, 0));
+      }
+      this.grid.push(col);
+    }
+  }
+
+  updateCurvature(bodies) {
+    for (let x = 0; x < this.grid.length; x++) {
+      for (let y = 0; y < this.grid[x].length; y++) {
+        const point = this.grid[x][y];
+        let z = 0;
+        bodies.forEach(body => {
+          const d = dist(point.x, point.y, body.position.x, body.position.y);
+          z -= (body.mass * body.curvatureMultiplier) / (d + body.curvatureOffset);
+        });
+        point.z = z * this.curvatureScale;
+      }
+    }
+  }
+
+  draw() {
+    stroke(120, 180, 255, 120);
+    strokeWeight(1.2);
+    noFill();
+    for (let x = 0; x < this.grid.length - 1; x++) {
+      for (let y = 0; y < this.grid[x].length - 1; y++) {
+        beginShape();
+        vertex(this.grid[x][y].x, this.grid[x][y].y, this.grid[x][y].z);
+        vertex(this.grid[x+1][y].x, this.grid[x+1][y].y, this.grid[x+1][y].z);
+        vertex(this.grid[x+1][y+1].x, this.grid[x+1][y+1].y, this.grid[x+1][y+1].z);
+        vertex(this.grid[x][y+1].x, this.grid[x][y+1].y, this.grid[x][y+1].z);
+        endShape(CLOSE);
+      }
+    }
+  }
+}
+
+class Simulation {
+  constructor() {
+    this.G = 0.2;
+    this.deltaTime = 0.8;
+    this.celestialBodies = [];
+    this.earthOrbit = new OrbitPath(400);
+    this.moonOrbit = new OrbitPath(100);
+    this.spacetimeGrid = null;
+  }
+
+  setup() {
+    createCanvas(1200, 800, WEBGL);
+    angleMode(DEGREES);
+
+    const sun = new CelestialBody(
+      createVector(0, 0),
+      100500,
+      50,
+      createVector(0, 0),
+      [255, 225, 50],
+      0.8,
+      10,
+      true
+    );
+
+    const earth = new CelestialBody(
+      createVector(300, 0),
+      3600,
+      10,
+      createVector(0, 8.5),
+      [70, 130, 200],
+      0.15,
+      20
+    );
+
+    const moon = new CelestialBody(
+      createVector(earth.position.x + 35, earth.position.y),
+      100,
+      3,
+      createVector(0, 4.2).add(earth.velocity),
+      [200, 200, 200],
+      0.05,
+      30
+    );
+
+    this.celestialBodies = [sun, earth, moon];
+    this.spacetimeGrid = new SpacetimeGrid(30, 1, 1000);
+    noStroke();
+  }
+
+  draw() {
+    background(0);
+    lights();
+    orbitControl(1, 1, 0.1);
+    translate(-width/4.5, -height/4.5);
+    scale(0.75);
+
+    this.updatePhysics();
+    this.spacetimeGrid.updateCurvature(this.celestialBodies);
+    this.spacetimeGrid.draw();
+    this.drawCelestialBodies();
+    this.drawOrbitPaths();
+  }
+
+  updatePhysics() {
+    const [sun, earth, moon] = this.celestialBodies;
+
+    const earthSunForce = CelestialBody.calculateGravity(earth, sun, this.G);
+    const moonSunForce = CelestialBody.calculateGravity(moon, sun, this.G);
+    const moonEarthForce = CelestialBody.calculateGravity(moon, earth, this.G);
+
+    earth.applyForce(earthSunForce, this.deltaTime);
+    moon.applyForce(p5.Vector.add(moonSunForce, moonEarthForce), this.deltaTime);
+
+    earth.update(this.deltaTime);
+    moon.update(this.deltaTime);
+
+    this.earthOrbit.addPosition(earth.position);
+    this.moonOrbit.addPosition(moon.position);
+  }
+
+  drawCelestialBodies() {
+    this.celestialBodies.forEach(body => body.draw());
+  }
+
+  drawOrbitPaths() {
+    this.earthOrbit.draw(color(50, 200, 100, 150));
+    this.moonOrbit.draw(color(180, 180, 180, 120));
+  }
+
+  keyPressed() {
+    if (key === 'p' || key === 'P') this.togglePause();
+  }
+
+  togglePause() {
+    isLooping() ? noLoop() : loop();
   }
 }
