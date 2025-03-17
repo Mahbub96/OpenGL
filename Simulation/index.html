@@ -1,13 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Relativistic Orbits</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.7/dat.gui.min.js"></script>
-</head>
-<body>
-  <script src="sketch.js"></script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Solar System Simulation</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+  </head>
+  <body>
+    <div>
+      <label for="speedSlider"
+        >Simulation Speed (5 - 60 seconds for 1 year):</label
+      >
+      <span id="speedValue">30 sec</span>
+    </div>
+    <script src="sketch.js"></script>
+  </body>
 </html>
